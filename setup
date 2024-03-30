@@ -1,0 +1,227 @@
+#!/usr/bin/env bash
+
+set -e
+
+SRC_DIR=$(dirname "$0")
+SCRIPTPATH="${SRC_DIR}/src"
+SRC_RESOURCES="$( echo "$( cd "${SCRIPTPATH}" >/dev/null 2>&1 || exit ; pwd -P )" )"
+
+CONSTANTS="${SRC_RESOURCES}/constants"
+. "${CONSTANTS}"
+
+if [ -d "$SRC_RESOURCES" ]; then
+  extensions="*.sh"
+  for file_name in ${SRC_RESOURCES}/${extensions}; do
+    if [ -r "$file_name" ]; then
+      . "${file_name}"
+    fi
+  done
+  unset file_name
+fi
+
+
+action="start"
+while getopts ':hf:' option; do
+  case "$option" in
+    h) help
+       exit
+       ;;
+    f) action=$OPTARG
+       ;;
+    :) printf "missing argument for -%s\n" "$OPTARG" >&2
+       help >&2
+       exit 1
+       ;;
+   \?) printf "illegal option: -%s\n" "$OPTARG" >&2
+       echo help >&2
+       exit 1
+       ;;
+  esac
+done
+shift $((OPTIND - 1))
+
+function start() {
+  ssh_keygen
+  check_git
+}
+
+if ! _is_exist "${action}"; then
+  help "A função ${action} não existe"
+  exit;
+fi
+
+
+# #########################################
+# # Verica e/ou instala os pacotes essenciais para o funcionamento
+echo -e "Verificando pacotes essenciais..."
+essentials=$(__join_by " " "${ESSENTIALS[@]}")
+_check_dependencies "$essentials"
+
+# #########################################
+# # call function from -f
+${action}
+
+
+# #~if is_installed git; then
+# #~sudo apt remove --yes git --purge
+# #~if __file_exist ~/.gitconfig; then
+# #~sudo rm -f rm -rf ~/.gitconfig
+# #~fi
+# #~fi
+
+# #~if is_installed code; then
+# #~for extension in "${vscode_extensions[@]}"; do
+# #~code --uninstall-extension "$extension"
+# #~done
+# #~sudo apt remove --yes code --purge
+# #~if __file_exist /usr/share/keyrings/microsoft-archive-keyring.gpg; then
+# #~sudo rm -f /usr/share/keyrings/microsoft-archive-keyring.gpg
+# #~fi
+# #~if __file_exist /etc/apt/sources.list.d/vscode.list; then
+# #~sudo rm -f /etc/apt/sources.list.d/vscode.list
+# #~fi
+# #~fi
+
+# #~populate_installed_packages
+
+# #~if is_installed docker; then
+# #~sudo apt remove --yes docker --purge
+# #~if __file_exist /etc/apt/sources.list.d/docker.list; then
+# #~sudo rm -f /etc/apt/sources.list.d/docker.list
+# #~fi
+# #~fi
+
+# #~populate_installed_packages
+
+# #~if is_installed git; then
+# #~sudo apt remove --yes git --purge
+# #~if __file_exist rm -rf ~/.gitconfig; then
+# #~sudo rm -f rm -rf ~/.gitconfig
+# #~fi
+# #~fi
+
+# #~populate_installed_packages
+# #~if is_installed guake; then
+# #~sudo apt remove --yes guake --purge
+# #~rm -rf $HOME/.config/guake.config
+# #~sudo apt update
+# #~fi
+
+# #~fi
+
+
+# #~# # git
+# #~if ! is_installed git; then
+# #~apt_install git
+# #~fi
+
+# #~# # vscode
+# #~# ## extensions
+# #~vscode_extensions=(EditorConfig.EditorConfig shakram02.bash-beautify eamodio.gitlens)
+# #~vscode_install() {
+# #~curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor >microsoft.gpg
+# #~sudo install -o root -g root -m 644 microsoft.gpg /usr/share/keyrings/microsoft-archive-keyring.gpg
+# #~sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
+# #~sudo apt update
+# #~apt_install code
+# #~rm -f microsoft.gpg
+# #~}
+
+# #~print_color "Verificando se vs code está instaldo" $COLOR_INFO
+# #~if ! is_installed code; then
+# #~print_color "vs code não está instalado.\n" $COLOR_WARNING
+# #~if question "Deseja instalar o vs code agora?" y; then
+# #~vscode_install
+# #~for extension in "${vscode_extensions[@]}"; do
+# #~code --install-extension "$extension"
+# #~done
+# #~fi
+# #~fi
+
+# #~# # fzf
+# #~if is_installed "git"; then
+
+# #~if is_dir ~/.fzf; then
+# #~~/.fzf/uninstall
+# #~rm -rf ~/.fzf
+# #~fi
+
+# #~git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+# #~~/.fzf/install
+# #~fi
+
+# #~check_git_config() {
+# #~git config --global "${1}" &>/dev/null || return 1
+# #~return 0
+# #~}
+
+# #~populate_installed_packages
+# #~if is_installed "git" && ! check_git_config user.name; then
+# #~echo -e "Digite um nome para ser usado pelo git. Exemplo(João Batista)"
+# #~read name
+# #~git config --global user.name "${name}"
+# #~if ! check_git_config user.name; then
+# #~echo -e "É preciso configurar um nome para prosseguir"
+# #~__exit
+# #~fi
+# #~fi
+
+# #~if is_installed "git" && ! check_git_config user.email; then
+# #~echo -e "Digite um email para ser usado pelo git."
+# #~read email
+# #~git config --global user.email "${email}"
+# #~if ! check_git_config user.email; then
+# #~echo -e "É preciso configurar um email para prosseguir"
+# #~__exit
+# #~fi
+# #~fi
+
+# #~if ! is_installed "guake"; then
+# #~sudo apt install guake guake-indicator --yes
+# #~cp guake.config $HOME/.config/guake.config
+# #~guake --restore-preferences=$HOME/.config/guake.config
+# #~fi
+
+# #~# ssh-keygen
+# #~__ssh_keygen() {
+# #~email=${1}
+# #~echo -e gerando chave ssh em "$HOME/.ssh/id_rsa"
+# #~ssh-keygen -t rsa -q -f "$HOME/.ssh/id_rsa" -N "" -C "$email"
+# #~eval "$(ssh-agent -s)"
+# #~ssh-add "$HOME/.ssh/id_rsa"
+# #~cat "$HOME/.ssh/id_rsa.pub"
+# #~}
+
+# #~if ! __file_exist "$HOME/.ssh/id_rsa"; then
+# #~print_color "Aparentemente você não tem uma chave ssh configurada" $COLOR_WARNING
+# #~if question "Vamos configurá-la agora?" y ; then
+# #~echo -e "Digite um email válido:"
+# #~read emailconfirm
+# #~if is_email_valid "$email"; then
+# #~__ssh_keygen $email
+# #~else
+# #~print_color "Email $email é inválido.\n" $COLOR_DANGER
+# #~__exit
+# #~fi
+# #~fi
+# #~fi
+
+# #~if __file_exist "${repolist_file}"; then
+# #~print_color "Arquivo ${repolist_file} encontrado\n" $color_warning
+# #~print_color "lendo arquivo ${repolist_file}\n" $COLOR_INFO
+# #~while read -r repo; do
+# #~if ! is_dir "$repo"; then
+# #~git clone --depth 1 "$repo"
+# #~fi
+# #~done <"${repolist_file}"
+# #~fi
+
+# #~if __file_exist "$HOME/.bash_prompt"; then
+# #~rm -rf "$HOME/.bash_prompt"
+# #~sed -i '/bash_prompt/d' ~/.bashrc
+# #~echo -e "[ -f ~/.bash_prompt ] && source ~/.bash_prompt" >>~/.bashrc
+# #~fi
+
+# #~. ~/.bashrc
+
+# #~print_color "Bom trabalho!\n" $COLOR_INFO

@@ -1,0 +1,15 @@
+check_git
+check_git_config
+get_credentials
+git_is_instaled
+github_send_ssh_key
+help
+print_color
+question
+select_ide
+selection_menu
+set_credentials
+ssh_keygen
+validate_print_color
+validate_question
+vscode_install
