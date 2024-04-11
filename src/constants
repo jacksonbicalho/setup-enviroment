@@ -12,7 +12,7 @@ readonly ESSENTIALS=("jq" "ca-certificates" "gnupg" "curl" "openssh-client" "bui
 readonly REPOLIST_FILE="repolist.txt"
 
 readonly GIT_HUB_NEW_TOKEN_URL="https://github.com/settings/tokens/new?description=\
-  Setup+enviroment&&scopes=admin:public_key"
+Setup+enviroment&&scopes=admin:public_key"
 
 readonly ALGORITHMS=("dsa" "ecdsa" "ecdsa-sk" "ed25519" "ed25519-sk" "rsa" "cancelar")
 
