@@ -1,9 +1,9 @@
-version: '3'
+version: '3.9'
 
 services:
   app:
-    container_name: setup-enviroment
-    image: setup-enviroment
+    container_name: setup-enviroment-app
+    image: setup-enviroment-app
     tty: true
     volumes:
       - .:/app
@@ -14,7 +14,7 @@ services:
 
   test:
     container_name: setup-enviroment-test
-    image: setup-enviroment
+    image: setup-enviroment-test
     tty: true
     volumes:
       - .:/app
