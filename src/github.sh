@@ -10,7 +10,6 @@ get_credentials() {
     echo -e "Acesse ${GIT_HUB_NEW_TOKEN_URL}"
     echo -e "e cole o token aqui:"
     read -r -s -p "token: " github_token
-    if [ ! -z $EMAIL ] then
 
     echo -r -e "Digite o email usado para acessar o github"
     read -r github_email

@@ -5,6 +5,6 @@ set -e
 
 rm -rf coverage
 
-shellspec \
+bash shellspec \
     --kcov \
     --helperdir spec/helpers

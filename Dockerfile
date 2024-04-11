@@ -38,4 +38,12 @@ FROM app as test
   COPY ./tests /usr/bin/tests
   RUN chmod +x /usr/bin/tests
 
+  RUN useradd \
+    --system \
+    --shell /usr/bin/zsh \
+    --uid 1001 \
+    test
+
+USER test
+
 CMD [ "/usr/bin/tests" ]

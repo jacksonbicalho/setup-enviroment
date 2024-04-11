@@ -4,13 +4,6 @@ set -e
 
 
 function _check_dependencies() {
-  
-  echo -e "Atualizando informações sobre pacotes do sistema..."
-  apt -y -qq update -o Dpkg::Progress-Fancy="0" -o APT::Color="0" -o Dpkg::Use-Pty="0"
-
-  echo -e "Verificando atualizações..."
-  apt -y -qq upgrade -o Dpkg::Progress-Fancy="0" -o APT::Color="0" -o Dpkg::Use-Pty="0"  
-  apt -y -qq dist-upgrade -o Dpkg::Progress-Fancy="0" -o APT::Color="0" -o Dpkg::Use-Pty="0"  
 
   echo -e "Verificando se as dependências solitadas estão instaladas..."
   deps=("${@}")
@@ -18,11 +11,10 @@ function _check_dependencies() {
   not_installed=()
   for dep in ${deps[@]};
   do
-    echo -e "Verificando se ${dep} está instalado..."
     if ! _is_installed "$dep"; then
       not_installed+=("${dep}")
     else
-      echo -e "${dep} OK!\n"
+      echo -e "${dep} Instalado!"
     fi
   done
 
@@ -37,22 +29,22 @@ function _check_dependencies() {
     echo -en "$_not_installed\n"
   done
 
-  echo -e "Executando instalação dos pacotes necessários... (Aguarde!)"
-  pendencies=$(__join_by " " ${not_installed[@]})
-  apt -y -qq install "${not_installed[@]}" &>/dev/null    
-  echo -e "Pronto!"
+  if ! question "Para prosseguir precisamos instalar essas dependências, vamos continuar?" y ; then
+    exit 0
+  fi
 
-  echo -e "Executando apt autoremove..."
-  apt -y -qq autoremove -o Dpkg::Progress-Fancy="0" -o APT::Color="0" -o Dpkg::Use-Pty="0"    
+  apt_install ${not_installed[@]}
+
+
+  (apt -y -qq autoremove &>/dev/null) &  echo -e "Executando apt autoremove..."
 
   unset deps
   unset deps_split
   unset not_installed
   unset _not_installed
-  unset pendencies
 }
 
-function _is_email_valid() {
+function is_email_valid() {
   regex="^([A-Za-z]+[A-Za-z0-9]*((\.|\-|\_)?[A-Za-z]+[A-Za-z0-9]*){1,})@(([A-Za-z]+[A-Za-z0-9]*)+((\.|\-|\_)?([A-Za-z]+[A-Za-z0-9]*)+){1,})+\.([A-Za-z]{2,})+$"
   [[ "${1}" =~ $regex ]]
 }
@@ -99,7 +91,26 @@ function __exit() {
 function __split() {
   IFS=' '
   words=()
-  read -a words <<< "$1"  
+  read -a words <<< "$1"
   for i in ' '; do words+=($i) ; done
   echo ${words[@]}
+}
+
+
+
+function apt_update() {
+  (apt -y -qq update &>/dev/null) & echo -e "Atualizando base de dados dos pacotes"
+}
+
+function apt_upgrade() {
+  (apt -y -qq upgrade &>/dev/null) & echo -e "Vericando se há pacotes a serem atualizados"
+}
+
+
+function dist-upgrade() {
+  (apt -y -qq dist-upgrade &>/dev/null) & echo -e "Vericanco se há atualizações da distro"
+}
+
+function apt_install() {
+  (apt -y -qq install "${@}" &>/dev/null) & echo -e "Instalando pacotes necessários"
 }
