@@ -2,15 +2,24 @@ version: '3'
 
 services:
   app:
-    container_name: etup-enviroment
-    image: etup-enviroment  
+    container_name: setup-enviroment
+    image: setup-enviroment
     tty: true
     volumes:
       - .:/app
     build:
       context: ./
       dockerfile: ./Dockerfile
+      target: app
 
-  
-
+  test:
+    container_name: setup-enviroment-test
+    image: setup-enviroment
+    tty: true
+    volumes:
+      - .:/app
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+      target: test
 
