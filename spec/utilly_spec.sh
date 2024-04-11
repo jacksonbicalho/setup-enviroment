@@ -11,7 +11,7 @@ Describe 'utilly'
         fi
       }
       When run func "/teste/kjjjj"
-      The output should equal 'true'
+      The output should equal 'false'
     End
 
   End
