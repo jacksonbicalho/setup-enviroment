@@ -33,4 +33,4 @@ RUN chmod +x /usr/bin/tests
 
 WORKDIR /app
 
-# CMD [ "/usr/bin/tests" ]
+CMD [ "/usr/bin/tests" ]
