@@ -10,6 +10,7 @@ select_ide
 selection_menu
 set_credentials
 ssh_keygen
+start
 validate_print_color
 validate_question
 vscode_install

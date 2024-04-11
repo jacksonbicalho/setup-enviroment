@@ -37,10 +37,10 @@ function _check_dependencies() {
     echo -en "$_not_installed\n"
   done
 
-  echo -en "Iniciando instação dos pacotes:\n"
+  echo -e "Executando instalação dos pacotes necessários... (Aguarde!)"
   pendencies=$(__join_by " " ${not_installed[@]})
-  echo "${pendencies}"
-  apt -y -qq install "${not_installed[@]}" -o Dpkg::Progress-Fancy="0" -o APT::Color="0" -o Dpkg::Use-Pty="0"    
+  apt -y -qq install "${not_installed[@]}" &>/dev/null    
+  echo -e "Pronto!"
 
   echo -e "Executando apt autoremove..."
   apt -y -qq autoremove -o Dpkg::Progress-Fancy="0" -o APT::Color="0" -o Dpkg::Use-Pty="0"    

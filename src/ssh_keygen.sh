@@ -34,6 +34,9 @@ function ssh_keygen() {
     return 0
   fi
 
+  export EMAIL=$email
+
+
   PS3="Selecione um algorítmo de sua preferência: "
   select algorithm in "${ALGORITHMS[@]}"; do
     case $algorithm in
@@ -56,5 +59,6 @@ function ssh_keygen() {
   ssh-keygen -t ${selected} -q -f "$HOME/.ssh/id_${selected}" -N "" -C "$email"
   eval "$(ssh-agent -s)"
   ssh-add "$HOME/.ssh/id_${selected}"
+  export KEY_PUB=id_${selected}.pub
   cat "$HOME/.ssh/id_${selected}.pub"
 }
