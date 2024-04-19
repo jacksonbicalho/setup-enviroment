@@ -7,8 +7,14 @@
   </a>&nbsp;
 </p>
 
-
 # Setup enviroment
 
 ## Configuração de um ambiente de desenvolvimento
+
+> [!CAUTION]
+> Projeto em fase de desenvolvimento.
+
+### Para reportar errors [é aqui](https://github.com/jacksonbicalho/setup-enviroment/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=).
+### Tem uma sugestão de [uma nova funcionalidade](https://github.com/jacksonbicalho/setup-enviroment/issues/new?assignees=&labels=&projects=&template=feature_request.md&title=)?
+
 
