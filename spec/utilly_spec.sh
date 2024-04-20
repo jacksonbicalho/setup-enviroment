@@ -3,12 +3,12 @@
 Describe 'utilly'
   Include src/utilly.sh
 
-  # Describe '_check_dependencies'
-  #   _check_dependencies() {
+  # Describe 'check_dependencies'
+  #   check_dependencies() {
   #     apt_install
   #   }
 
-  #   It 'runs the _check_dependencies'
+  #   It 'runs the check_dependencies'
   #     When call _check_depend \
   #       "Instalando pacotes necessários..." \
   #       "Pronto!"
@@ -48,11 +48,11 @@ Describe 'utilly'
 
   End
 
-  Describe '__is_dir'
+  Describe 'is_dir'
 
     It 'return false'
       func(){
-        if ! __is_dir "$1"; then
+        if ! is_dir "$1"; then
           echo "false";
         fi
       }

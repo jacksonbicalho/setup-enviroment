@@ -3,15 +3,15 @@
 set -e
 
 
-function _check_dependencies() {
+function check_dependencies() {
 
   echo -e "Verificando se as dependências solitadas estão instaladas..."
   deps=("${@}")
-  deps_split=$(__split " " "${deps}")
+  deps_split=$(split " " "${deps}")
   not_installed=()
   for dep in ${deps[@]};
   do
-    if ! _is_installed "$dep"; then
+    if ! is_installed "$dep"; then
       not_installed+=("${dep}")
     else
       echo -e "${dep} Instalado!"
@@ -49,7 +49,7 @@ function is_email_valid() {
   [[ "${1}" =~ $regex ]]
 }
 
-function _is_installed() {
+function is_installed() {
   pattern=$1
   if apt list --installed 2>/dev/null | grep -q "^$pattern/"; then
       return 0
@@ -58,25 +58,25 @@ function _is_installed() {
   fi
 }
 
-function _is_exist() {
+function is_exist() {
   type "${1}" &>/dev/null && return 0 || return 1
 }
 
-function __file_exist() {
+function file_exist() {
   if [ -f "${1}" ]; then
     return 0
   fi
   return 1
 }
 
-function __is_dir() {
+function is_dir() {
   if [ -d "${1}" ]; then
     return 0
   fi
   return 1
 }
 
-function __join_by() {
+function join_by() {
   local d=${1-} f=${2-}
   if shift 2; then
     printf %s "$f" "${@/#/$d}"
@@ -88,7 +88,7 @@ function __exit() {
   exit 1
 }
 
-function __split() {
+function split() {
   IFS=' '
   words=()
   read -a words <<< "$1"
@@ -96,7 +96,10 @@ function __split() {
   echo ${words[@]}
 }
 
-
+function date_now () {
+  now="$(date +'%Y-%m-%d-%H:%M:%S')"
+  echo "${now}"
+}
 
 function apt_update() {
   (apt -y -qq update &>/dev/null) & echo -e "Atualizando base de dados dos pacotes"
@@ -112,5 +115,6 @@ function dist-upgrade() {
 }
 
 function apt_install() {
-  (apt -y -qq install "${@}" &>/dev/null) & echo -e "Instalando pacotes necessários"
+  echo -e "Instalando pacotes necessários"
+  apt install --yes "${@}"
 }

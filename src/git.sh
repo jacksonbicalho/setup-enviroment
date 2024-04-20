@@ -9,7 +9,7 @@ function check_git() {
   if ! git_is_instaled > /dev/null 2>&1; then
     print_color "[!] git não está instalado" "$COLOR_WARNING"
     if question "Deseja instalar git?" y; then
-      apt -y -qq install git -o Dpkg::Progress-Fancy="0" -o APT::Color="0" -o Dpkg::Use-Pty="0"          
+      apt -y -qq install git -o Dpkg::Progress-Fancy="0" -o APT::Color="0" -o Dpkg::Use-Pty="0"
       if git_is_instaled; then
         print_color "git instalado com sucesso" "$COLOR_SUCCESS" > /dev/null 2>&1
       fi
@@ -51,13 +51,16 @@ function check_git() {
           echo "Dgite um valor para ${selected}"
           read config
           git config --global "${selected}" "${config}"
+          if [ "${selected}" == "user.name" ]; then
+            set_config "config[].name" "\"${config}\""
+          fi
           if check_git_config "${selected}"; then
             echo -e "${selected} configurado: ${config}\n"
             unset config
           fi
         fi
       fi
-      unset config      
+      unset config
     done
   fi
 }

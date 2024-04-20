@@ -1,2 +1,3 @@
 installed_packages.txt
 coverage
+.env

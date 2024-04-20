@@ -19,8 +19,8 @@ if [ -d "$SRC_RESOURCES" ]; then
   unset file_name
 fi
 
+action="main"
 
-action="start"
 while getopts ':hf:' option; do
   case "$option" in
     h) help
@@ -38,26 +38,42 @@ while getopts ':hf:' option; do
        ;;
   esac
 done
+
 shift $((OPTIND - 1))
 
-function start() {
+
+function main () {
+
+  echo -e "$@"
+
+  # #########################################
+  # # Verica e/ou instala os pacotes essenciais para o funcionamento
+  echo -e "Verificando pacotes essenciais..."
+  essentials=$(join_by " " "${ESSENTIALS[@]}")
+  check_dependencies "$essentials"
+
+  figlet Seja bem vindo -w100
+
+  if ! is_exist "${action}"; then
+    help "A função ${action} não existe"
+    exit;
+  fi
+
+  # #########################################
+  # # call function from -f
+  if [ "$action" != "main" ]; then
+    ${action}
+  fi
+
+  init_config
+
   ssh_keygen
+
   check_git
-  github_send_ssh_key  
+
+  github_send_ssh_key
+
 }
 
-if ! _is_exist "${action}"; then
-  help "A função ${action} não existe"
-  exit;
-fi
 
-
-# #########################################
-# # Verica e/ou instala os pacotes essenciais para o funcionamento
-echo -e "Verificando pacotes essenciais..."
-essentials=$(__join_by " " "${ESSENTIALS[@]}")
-_check_dependencies "$essentials"
-
-# #########################################
-# # call function from -f
-${action}
+main "$@"
