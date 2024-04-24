@@ -2,60 +2,50 @@
 
 set -e
 
-
-init_config () {
-  last_update="`date_now`"
-  set_config "last_update" "\"${last_update}\""
-}
-
-get_config () {
-  local key="${1}"
-  # echo $(jq -r \'."${key}"\' "$APP_CONFIG_FILE")
-  echo `jq "$key" "${APP_CONFIG_FILE}"`
-}
-
-set_config () {
-
-  local key="${1}"
-  local value="${2}"
+init_config() {
 
   if ! is_dir "${CONFIG_PATH}"; then
     mkdir -p "${CONFIG_PATH}"
   fi
 
   if ! file_exist "${APP_CONFIG_FILE}"; then
-    create_json
+    touch "${APP_CONFIG_FILE}"
+    set_config "version" "0.0.1"
   fi
 
-  contents=$(jq ".$key = $value" ${APP_CONFIG_FILE})
-  echo -E $contents > ${APP_CONFIG_FILE}
-
+  last_update="$(date_now)"
+  set_config "last_update" "${last_update}"
+  # shellcheck disable=SC2091
+  distro=$(distro_info)
+  IFS='|'
+  distro_info=()
+  read -ra distro_info <<<"$distro"
+  # shellcheck disable=SC2043
+  for i in "|"; do distro_info+=("$i"); done
+  set_config "distro[].name" "${distro_info[0]}"
+  set_config "distro[].version" "${distro_info[1]}"
 }
 
-create_json () {
-
-json=$(cat <<EOF
-{
-  "version": "0.0.0",
-  "distro":[
-    {
-      "name": "null",
-      "version": "null"
-    }
-  ],
-  "config": [
-    {
-      "name": "null",
-      "email": "null",
-      "github": "null"
-    }
-  ],
-  "last_update": "123123123"
-}
-EOF
-)
-
-  echo -E "${json}" > "${APP_CONFIG_FILE}"
+get_config() {
+  local key="\"${1}\""
+  res=$(jq ".$key" "${APP_CONFIG_FILE}")
+  if [ ! -n "$res" ]; then
+    return 1
+  fi
+  echo "$res"
 }
 
+set_config() {
 
+  local key="${1}"
+  local value="\"${2}\""
+
+  if ! get_config "$key"; then
+    contents=$( echo "{\"$key\": \"$value\"}" | jq .)
+    echo -e1 "$contents"
+  else
+    contents=$(jq ".$key = $value" "${APP_CONFIG_FILE}")
+  fi
+
+  echo -E "$contents" >"${APP_CONFIG_FILE}"
+}

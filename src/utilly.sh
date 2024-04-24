@@ -7,7 +7,6 @@ function check_dependencies() {
 
   echo -e "Verificando se as dependências solitadas estão instaladas..."
   deps=("${@}")
-  deps_split=$(split " " "${deps}")
   not_installed=()
   for dep in ${deps[@]};
   do
@@ -36,10 +35,9 @@ function check_dependencies() {
   apt_install ${not_installed[@]}
 
 
-  (apt -y -qq autoremove &>/dev/null) &  echo -e "Executando apt autoremove..."
+  apt -y -qq autoremove
 
   unset deps
-  unset deps_split
   unset not_installed
   unset _not_installed
 }
@@ -102,16 +100,16 @@ function date_now () {
 }
 
 function apt_update() {
-  (apt -y -qq update &>/dev/null) & echo -e "Atualizando base de dados dos pacotes"
+  apt -y -qq update
 }
 
 function apt_upgrade() {
-  (apt -y -qq upgrade &>/dev/null) & echo -e "Vericando se há pacotes a serem atualizados"
+  apt -y -qq upgrade
 }
 
 
 function dist-upgrade() {
-  (apt -y -qq dist-upgrade &>/dev/null) & echo -e "Vericanco se há atualizações da distro"
+  apt -y -qq dist-upgrade
 }
 
 function apt_install() {
