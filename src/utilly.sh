@@ -4,8 +4,6 @@ set -e
 
 
 function check_dependencies() {
-
-  echo -e "Verificando se as dependências solitadas estão instaladas..."
   deps=("${@}")
   not_installed=()
   for dep in ${deps[@]};
@@ -18,11 +16,11 @@ function check_dependencies() {
   done
 
   if [[ "${#not_installed[@]}" == 0 ]]; then
-    echo -en "os pacotes necessários estão instalados!\n"
+    echo -e "os pacotes necessários estão instalados!"
     return 0;
   fi
 
-  echo -en "os seguinte pacotes não estão instalados:\n"
+  echo -en "os seguintes pacotes não estão instalados:\n"
   for _not_installed in ${not_installed[@]};
   do
     echo -en "$_not_installed\n"
@@ -95,7 +93,8 @@ function split() {
 }
 
 function date_now () {
-  now="$(date +'%Y-%m-%d-%H:%M:%S')"
+  timezone=$(get_config "timezone")
+  now="$(TZ=":$timezone" date +'%Y-%m-%d %H:%M:%S')"
   echo "${now}"
 }
 

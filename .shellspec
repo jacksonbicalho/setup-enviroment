@@ -10,8 +10,11 @@
 --kcov-options "--include-pattern=.sh,constants"
 
 ## Example: Only specified files/directories
---kcov-options "--include-pattern=setup,/src/"
+--kcov-options "--include-pattern=run,/src/"
 
 ## Clean
 --kcov-options "--clean"
-        
+
+## limits
+--kcov-options "-l 50,100"
+
