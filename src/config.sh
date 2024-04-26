@@ -3,7 +3,7 @@
 set -e
 
 init_config() {
-
+  local first=false
   version=$(get_version)
 
   if ! is_dir "${CONFIG_PATH}"; then
@@ -12,10 +12,22 @@ init_config() {
 
   if ! file_exist "${APP_CONFIG_FILE}"; then
     touch "${APP_CONFIG_FILE}"
+    first=true
   fi
-  set_config "version" "$version"
-  set_config "timezone" "UTC+3"
-  set_config "instalation_date" "$(date_now)"
+
+  if $first; then
+    set_config "version" "$version"
+    set_config "timezone" "UTC+3"
+    set_config "instalation_date" "$(date_now)"
+
+    for conf_ini in "${CONFIGS_INI[@]}";
+      do
+      echo -e "Digite um valor para $conf_ini"
+      read -r conf_info
+      set_config "$conf_ini" "$conf_info"
+    done
+  fi
+
   return 0
 }
 

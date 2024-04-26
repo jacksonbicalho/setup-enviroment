@@ -4,40 +4,23 @@ set -e
 
 
 function check_dependencies() {
-  deps=("${@}")
   not_installed=()
-  for dep in ${deps[@]};
+  for dep in "${@}";
   do
     if ! is_installed "$dep"; then
-      not_installed+=("${dep}")
+       read -ra not_installed <<< "$dep"
     else
       echo -e "${dep} Instalado!"
     fi
   done
 
   if [[ "${#not_installed[@]}" == 0 ]]; then
-    echo -e "os pacotes necessários estão instalados!"
-    return 0;
+    return 1;
   fi
 
-  echo -en "os seguintes pacotes não estão instalados:\n"
-  for _not_installed in ${not_installed[@]};
-  do
-    echo -en "$_not_installed\n"
-  done
+  # shellcheck disable=SC2068
+  echo ${not_installed[@]}
 
-  if ! question "Para prosseguir precisamos instalar essas dependências, vamos continuar?" y ; then
-    exit 0
-  fi
-
-  apt_install ${not_installed[@]}
-
-
-  apt -y -qq autoremove
-
-  unset deps
-  unset not_installed
-  unset _not_installed
 }
 
 function is_email_valid() {
@@ -79,17 +62,12 @@ function join_by() {
   fi
 }
 
-function __exit() {
-  print_color "Saindo..." "$COLOR_INFO"
-  exit 1
-}
-
 function split() {
   IFS=' '
   words=()
-  read -a words <<< "$1"
-  for i in ' '; do words+=($i) ; done
-  echo ${words[@]}
+  read -ra words <<< "$1"
+  for i in $(' '); do words+=($i) ; done
+  echo "${words[@]}"
 }
 
 function date_now () {
@@ -99,19 +77,18 @@ function date_now () {
 }
 
 function apt_update() {
-  apt -y -qq update
+  apt update --yes
 }
 
 function apt_upgrade() {
-  apt -y -qq upgrade
+  apt upgrade --yes
 }
 
 
-function dist-upgrade() {
-  apt -y -qq dist-upgrade
+function apt_dist_upgrade() {
+  apt dist-upgrade --yes
 }
 
 function apt_install() {
-  echo -e "Instalando pacotes necessários"
   apt install --yes "${@}"
 }
