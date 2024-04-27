@@ -7,6 +7,7 @@ jobs:
   test:
     name: Run test suite
     runs-on: ubuntu-latest
+      working-directory: ./app
 
     steps:
     - name: Checkout code
@@ -14,3 +15,4 @@ jobs:
 
     - name: Run tests
       run:  docker compose run --rm tests --
+        working-directory: ./app
