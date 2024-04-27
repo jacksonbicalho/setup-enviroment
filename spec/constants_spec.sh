@@ -71,11 +71,20 @@ Describe 'constants'
     End
 
     It 'preserves SLEEP'
+        # shellcheck disable=SC2317
         preserve() { %preserve constant; }
         AfterRun preserve
 
         When run func "$SLEEP"
         The variable constant should eq "$SLEEP"
+    End
+
+    It 'preserves CONFIGS_INI'
+        preserve() { %preserve constant; }
+        AfterRun preserve
+
+        When run func "$CONFIGS_INI"
+        The variable constant should eq "$CONFIGS_INI"
     End
 
 End

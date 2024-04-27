@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+
+set -e
+
+SRC_DIR=$(dirname "$0")
+SCRIPTPATH="${SRC_DIR}/src"
+SRC_RESOURCES="$(cd "${SCRIPTPATH}" >/dev/null 2>&1 || exit; pwd -P )"
+
+CONSTANTS="${SRC_RESOURCES}/constants"
+# shellcheck source=/dev/null
+. "${CONSTANTS}"
+
+if [ -d "$SRC_RESOURCES" ]; then
+  extensions="*.sh"
+  for file_name in ${SRC_RESOURCES}/${extensions}; do
+    if [ -r "$file_name" ]; then
+      # shellcheck source=/dev/null
+      . "${file_name}"
+    fi
+  done
+  unset file_name
+fi
+
+action="main"
+
+while getopts ':hf:' option; do
+  case "$option" in
+  h)
+    help
+    exit
+    ;;
+  f)
+    action=$OPTARG
+    ;;
+  :)
+    printf "missing argument for -%s\n" "$OPTARG" >&2
+    help >&2
+    exit 1
+    ;;
+  \?)
+    printf "illegal option: -%s\n" "$OPTARG" >&2
+    echo help >&2
+    exit 1
+    ;;
+  esac
+done
+
+shift $((OPTIND - 1))
+
+function main() {
+
+  # #########################################
+  # # Verica e/ou instala os pacotes essenciais para o funcionamento
+  echo -e "Verificando pacotes essenciais."
+  # shellcheck disable=SC2153
+  essentials=$(join_by " " "${ESSENTIALS[@]}")
+  not_installed=$(check_dependencies "$essentials")
+
+  if [[ -z $not_installed ]]; then
+    echo -en "os seguintes pacotes não estão instalados:\n"
+    # shellcheck disable=SC2068
+    for _not_installed in ${not_installed[@]};
+    do
+      echo -en "- $_not_installed\n"
+    done
+
+    if ! question "Para prosseguir precisamos instalar essas dependências, vamos continuar?" y ; then
+      exit 0
+    fi
+
+    apt_update
+    apt_upgrade
+    apt_dist_upgrade
+    # shellcheck disable=SC2068
+    apt_install ${not_installed[@]}
+    apt autoremove --yes
+  fi
+
+  echo -e "Os pacotes necessarios para começarmos estão instalados."
+  # figlet Seja bem vindo -w100
+
+  if ! is_exist "${action}"; then
+    help "A função ${action} não existe."
+    exit
+  fi
+
+
+  # #########################################
+  # # call function from -f
+  if [ "$action" != "main" ]; then
+    ${action}
+  fi
+
+  config::init
+  git::init
+  # ssh_keygen
+  # github_send_ssh_key
+
+}
+
+main "$@"

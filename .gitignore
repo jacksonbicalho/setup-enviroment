@@ -1,2 +1,6 @@
 installed_packages.txt
 coverage
+.env
+config/*
+!empty
+
