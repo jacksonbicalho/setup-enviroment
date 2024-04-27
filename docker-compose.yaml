@@ -5,17 +5,21 @@ services:
     tty: true
     volumes:
       - .:/app
-      - ./config:/root/.config/setup-enviroment
     build:
       context: ./
       dockerfile: ./Dockerfile
+      target: app
 
   tests:
     container_name: setup-enviroment-test
-    image: jacksonbicalho/shellspec-kcov:latest
+    image: setup-enviroment-test
     # env_file:
     #   - .env
     tty: true
     volumes:
       - .:/app
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+      target: tests
 
