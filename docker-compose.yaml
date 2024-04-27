@@ -9,20 +9,13 @@ services:
     build:
       context: ./
       dockerfile: ./Dockerfile
-      target: app
 
   tests:
     container_name: setup-enviroment-test
-    image: setup-enviroment-test
+    image: jacksonbicalho/shellspec-kcov:latest
     # env_file:
     #   - .env
     tty: true
     volumes:
       - .:/app
-    build:
-      context: ./
-      dockerfile: ./Dockerfile
-      target: tests
-      args:
-        - DOCKER_USER_UID=${DOCKER_USER_UID}
 
