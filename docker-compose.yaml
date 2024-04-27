@@ -14,8 +14,8 @@ services:
   tests:
     container_name: setup-enviroment-test
     image: setup-enviroment-test
-    env_file:
-      - .env
+    # env_file:
+    #   - .env
     tty: true
     volumes:
       - .:/app
