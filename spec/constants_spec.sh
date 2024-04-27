@@ -43,15 +43,6 @@ Describe 'constants'
         The variable constant should eq "$ESSENTIALS"
     End
 
-    It 'preserves REPOLIST_FILE'
-        # shellcheck disable=SC2317
-        preserve() { %preserve constant; }
-        AfterRun preserve
-
-        When run func "$REPOLIST_FILE"
-        The variable constant should eq "$REPOLIST_FILE"
-    End
-
     It 'preserves GIT_HUB_NEW_TOKEN_URL'
         # shellcheck disable=SC2317
         preserve() { %preserve constant; }

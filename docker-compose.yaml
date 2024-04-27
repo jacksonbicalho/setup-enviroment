@@ -1,7 +1,7 @@
 services:
   app:
-    container_name: setup-enviroment-app
-    image: setup-enviroment-app
+    container_name: jacksonbicalho-shellspec-kcov-app
+    image: jacksonbicalho/setup-enviroment:debian-bookworm0.0.0
     tty: true
     volumes:
       - .:/app
@@ -11,8 +11,8 @@ services:
       target: app
 
   tests:
-    container_name: setup-enviroment-test
-    image: setup-enviroment-test
+    container_name: jacksonbicalho-shellspec-kcov-tests
+    image: jacksonbicalho/shellspec-kcov:debian-bookworm0.0.0
     # env_file:
     #   - .env
     tty: true
