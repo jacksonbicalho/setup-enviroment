@@ -5,7 +5,6 @@ services:
     tty: true
     volumes:
       - .:/app
-      - ./config:/root/.config/setup-enviroment
     build:
       context: ./
       dockerfile: ./Dockerfile
