@@ -2,7 +2,7 @@
 
 set -e
 
-init_config() {
+config::init() {
   local first=false
   version=$(get_version)
 
@@ -16,22 +16,21 @@ init_config() {
   fi
 
   if $first; then
-    set_config "version" "$version"
-    set_config "timezone" "UTC+3"
-    set_config "instalation_date" "$(date_now)"
+    config::set "version" "$version"
+    config::set "timezone" "UTC+3"
+    config::set "instalation_date" "$(date_now)"
 
     for conf_ini in "${CONFIGS_INI[@]}";
       do
-      echo -e "Digite um valor para $conf_ini"
-      read -r conf_info
-      set_config "$conf_ini" "$conf_info"
+      res=$(utilly::prompt_input  "Digite um valor para" "$conf_ini")
+      config::set "$conf_ini" "$res"
     done
   fi
 
   return 0
 }
 
-get_config() {
+config::get() {
   normalize_file
   while read -r line; do
     IFS="=" read -r -a key_value <<<"$line"
@@ -44,11 +43,11 @@ get_config() {
   done <"$APP_CONFIG_FILE"; return 1
 }
 
-set_config() {
+config::set() {
   normalize_file
   local key="${1}"
   local value="${2}"
-  if ! get_config "$key" >/dev/null 2>&1; then
+  if ! config::get "$key" >/dev/null 2>&1; then
     write_file "$key=$value"
     return 0
   fi

@@ -2,22 +2,23 @@
 
 set -e
 
-function check_git() {
+function git::init() {
 
-  echo -e "Verificando instação do git...\n"
-  if ! git_is_instaled >/dev/null 2>&1; then
+  echo -e "Verificando instação do git."
+  if ! git::is_instaled >/dev/null 2>&1; then
     print_color "[!] git não está instalado" "$COLOR_WARNING"
     if question "Deseja instalar git?" y; then
       apt -y -qq install git -o Dpkg::Progress-Fancy="0" -o APT::Color="0" -o Dpkg::Use-Pty="0"
-      if git_is_instaled; then
+      if git::is_instaled; then
         print_color "git instalado com sucesso" "$COLOR_SUCCESS" >/dev/null 2>&1
       fi
     fi
   else
-    print_color "git está instalado" "$COLOR_SUCCESS" >/dev/null 2>&1
+    print_color "git está instalado." "$COLOR_SUCCESS"
   fi
 
   if question "Deseja verificar as configurações padrões?" y; then
+    clear
     options=()
     options+=("user.name" "user.email" "init.defaultBranch" "pull.rebase")
     prompt=$(print_color "Marque a opção com [espaço] (use-o novamente para desmarcar, ENTER quando terminar, Q para sair):" "$COLOR_WARNING")
@@ -43,12 +44,11 @@ function check_git() {
     done
 
     for selected in "${selecteds[@]}"; do
-      echo -e "${selected}\n"
-      echo "Dgite um valor para ${selected}"
+      echo "Dgite um valor para git.${selected}"
       read -r config
       git config --global "${selected}" "${config}"
-      if check_git_config "${selected}"; then
-        set_config "git[].$selected" "${config}"
+      if git::check_config "${selected}"; then
+        set_config "git.$selected" "${config}"
         echo -e "${selected} configurado: ${config}\n"
         unset config
       fi
@@ -57,12 +57,12 @@ function check_git() {
   fi
 }
 
-function git_is_instaled() {
+function git::is_instaled() {
   git --version &>/dev/null || return 1
   return 0
 }
 
-function check_git_config() {
+function git::check_config() {
   git config --global "${1}" &>/dev/null || return 1
   return 0
 }

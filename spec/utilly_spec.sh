@@ -3,59 +3,168 @@
 Describe 'utilly'
   Include src/utilly.sh
 
-  Mock apt
-    echo 0
+  Describe 'check_dependencies'
+
+    Mock essentials
+      essentials_mock=("git")
+      # shellcheck disable=SC1087
+      echo "${essentials_mock[@]}"
+    End
+
+    It 'runs the check_dependencies not instaled'
+      # shellcheck disable=SC2154
+      When call check_dependencies "$essentials"
+      The status should end with 1
+    End
+
+    It 'runs the check_dependencies '
+      essentials+=("batata" "goiaba")
+      essentials2=$(join_by " " "${essentials[@]}")
+      When call check_dependencies "$essentials2"
+     The output should equal "batata goiaba"
+    End
+
   End
 
-  Describe 'check_dependencies'
-    It 'runs the check_dependencies'
-      When call check_dependencies
-      The output should equal 'false'
+
+  Describe 'is_email_valid'
+    Describe 'emails valid'
+      Parameters
+        "#1" 'batata@teste.org'
+        "#2" 'batata@org.br'
+        "#3" 'dedo@geme.com.br'
+        "#4" 'eer@saco.org'
+      End
+
+      Example "$1 is email valid $2"
+        When call is_email_valid "$2"
+        The status should end with 0
+      End
+    End
+
+    Describe 'emails invalid'
+      Parameters
+        "#1" 'batata@org'
+        "#2" 'b atata@org.br.tede'
+        "#3" 'dedo@br'
+        "#4" 'eer@saco .org'
+      End
+
+      Example "$1 is email ivalid $2"
+        When call is_email_valid "$2"
+        The status should end with 1
+      End
     End
   End
 
-  # Describe 'is_email_valid'
-  #   It 'return true'
-  #     func(){
-  #       # shellcheck disable=SC2317
-  #       if ! is_email_valid "$1"; then
-  #         echo "false"
-  #       else
-  #         echo "true"
-  #       fi
-  #     }
-  #     When run func 'teste@com.br'
-  #     The output should equal 'true'
-  #   End
+  Describe 'is_installed'
+    It 'guruguru not intaled'
+      When call is_installed "guruguru"
+      The status should end with 1
+    End
 
-  #   It 'return false'
-  #     func(){
-  #       # shellcheck disable=SC2317
-  #       if ! is_email_valid "$1"; then
-  #         echo "false"
-  #       else
-  #         echo "true"
-  #       fi
-  #     }
-  #     When run func 'teste%%....%com.br'
-  #     The output should equal 'false'
-  #   End
 
-  # End
+    It 'gurugqualque.lib not intaled'
+      When call is_installed "gurugqualque.lib"
+      The status should end with 1
+    End
 
-  # Describe 'is_dir'
+    It 'git is intaled'
+      When call is_installed "git"
+      The status should end with 0
+    End
 
-  #   It 'return false'
-  #     func(){
-  #       if ! is_dir "$1"; then
-  #         echo "false";
-  #       fi
-  #     }
-  #     When run func "/teste/kjjjj"
-  #     The output should equal 'false'
-  #   End
 
-  # End
+    It 'bash is intaled'
+      When call is_installed "bash"
+      The status should end with 0
+    End
+  End
+
+
+  Describe 'is_exist'
+    It 'd not exist'
+      When call is_exist "$d"
+      The status should end with 1
+    End
+
+    It 'd exist'
+      d="qualquer coisa"
+      When call is_exist "$d"
+      The status should end with 1
+    End
+
+  End
+
+
+
+  Describe 'file_exist'
+    It 'file /batata/5/teste.txt not exist'
+      When call file_exist "/batata/5/teste.txt"
+      The status should end with 1
+    End
+
+    It 'file /etc/passwd exist'
+      When call file_exist "/etc/passwd"
+      The status should end with 0
+    End
+  End
+
+
+  Describe 'is_dir'
+    It 'is /batata/ not is dir'
+      When call is_dir "/batata/"
+      The status should end with 1
+    End
+
+    It 'is /etc is dir'
+      When call is_dir "/etc"
+      The status should end with 0
+    End
+  End
+
+
+
+  Describe 'join_by'
+    array_pipe=("um" "dois" "tres")
+    It 'is join by pipe'
+      When call join_by "|" "${array_pipe[@]}"
+      The output should equal "um|dois|tres"
+    End
+
+    It 'is join by space'
+      When call join_by " " "${array_pipe[@]}"
+      The output should equal "um dois tres"
+    End
+  End
+
+  Describe 'apt'
+
+    Mock apt
+      echo 0;
+    End
+
+    It 'apt_update simple'
+      When call apt_update
+      The output should equal 0
+    End
+
+
+    It 'apt_upgrade simple'
+      When call apt_upgrade
+      The output should equal 0
+    End
+
+    It 'apt_dist_upgrade simple'
+      When call apt_dist_upgrade
+      The output should equal 0
+    End
+
+    It 'apt_install simple'
+      When call apt_install
+      The output should equal 0
+    End
+  End
 
 End
 

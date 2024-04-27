@@ -9,8 +9,6 @@ function check_dependencies() {
   do
     if ! is_installed "$dep"; then
        read -ra not_installed <<< "$dep"
-    else
-      echo -e "${dep} Instalado!"
     fi
   done
 
@@ -62,16 +60,8 @@ function join_by() {
   fi
 }
 
-function split() {
-  IFS=' '
-  words=()
-  read -ra words <<< "$1"
-  for i in $(' '); do words+=($i) ; done
-  echo "${words[@]}"
-}
-
 function date_now () {
-  timezone=$(get_config "timezone")
+  timezone=$(config::get "timezone")
   now="$(TZ=":$timezone" date +'%Y-%m-%d %H:%M:%S')"
   echo "${now}"
 }
@@ -91,4 +81,12 @@ function apt_dist_upgrade() {
 
 function apt_install() {
   apt install --yes "${@}"
+}
+
+function utilly::prompt_input(){
+  local text=$1
+  local var=$2
+  echo -e "$text $var"
+  read -r "${var?}"
+  echo "${var?}"
 }
