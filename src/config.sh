@@ -3,43 +3,38 @@
 set -e
 
 function config::init() {
-  clear
+  local replace_line_sleep="${1:-5}"
+
   local first=false
   version=$(get_version)
 
-  utilly::replace_line "Verificando configuração..." 5
+  utilly::replace_line "Verificando configuração..." "$replace_line_sleep"
 
-  utilly::replace_line "Verificando existência do diretório de configuração." 5
+  utilly::replace_line "Verificando existência do diretório de configuração." "$replace_line_sleep"
   if ! is_dir "${CONFIG_PATH}"; then
-    utilly::replace_line "Criando diretório ${CONFIG_PATH}" 5
+    utilly::replace_line "Criando diretório ${CONFIG_PATH}" "$replace_line_sleep"
     mkdir -p "${CONFIG_PATH}"
   fi
 
-  utilly::replace_line "Verificando existência do arquivo de configuração." 5
+  utilly::replace_line "Verificando existência do arquivo de configuração." "$replace_line_sleep"
   if ! file_exist "${APP_CONFIG_FILE}"; then
-    utilly::replace_line "Criando aequivo de configuração ${APP_CONFIG_FILE}" 5
+    utilly::replace_line "Criando aequivo de configuração ${APP_CONFIG_FILE}" "$replace_line_sleep"
     touch "${APP_CONFIG_FILE}"
     first=true
   fi
 
   if $first; then
-    utilly::replace_line "configurando versão [ $version ]..." 5
+    utilly::replace_line "configurando versão [ $version ]..." "$replace_line_sleep"
     config::set "version" "$version"
-    utilly::replace_line "configurando timezone padrão [ UTC+3 ]..." 5
+    utilly::replace_line "configurando timezone padrão [ UTC+3 ]..." "$replace_line_sleep"
     config::set "timezone" "UTC+3"
     date_instation="$(date_now)"
-    utilly::replace_line "configurando data de instalação [ $date_instation ]..." 5
+    utilly::replace_line "configurando data de instalação [ $date_instation ]..." "$replace_line_sleep"
     config::set "instalation_date" "$date_instation"
-
-    for conf_ini in "${CONFIGS_INI[@]}"; do
-      utilly::replace_line "Digite uma valor para $conf_ini: " 0
-      read -r "${conf_ini?}"
-      utilly::replace_line "Configurando $conf_ini" 5
-      config::set "$conf_ini" "${conf_ini?}"
-    done
+    config::prompt_input
   fi
   text=$(print_color "Configuração finalizada com sucesso..." "$COLOR_SUCCESS")
-  utilly::replace_line "$text" 5
+  utilly::replace_line "$text" "$replace_line_sleep"
   return 0
 }
 
@@ -53,8 +48,7 @@ function config::get() {
       echo "${value}"
       return 0
     fi
-  done <"$APP_CONFIG_FILE"
-  return 1
+  done <"$APP_CONFIG_FILE" && return 1
 }
 
 function config::set() {
@@ -68,6 +62,17 @@ function config::set() {
   change_var "$key" "$value"
   return 0
 }
+
+
+function config::prompt_input(){
+  for conf_ini in "${CONFIGS_INI[@]}"; do
+    utilly::replace_line "Digite uma valor para $conf_ini: " "$replace_line_sleep"
+    read -r "${conf_ini?}"
+    utilly::replace_line "Configurando $conf_ini" "$replace_line_sleep"
+    config::set "$conf_ini" "${conf_ini?}"
+  done && return 0
+}
+
 
 change_var() {
   local key="${1}"

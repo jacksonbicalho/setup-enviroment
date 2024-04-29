@@ -2,13 +2,14 @@
 
 Describe 'Config'
 
+  Include src/print_color.sh
   Include src/utilly.sh
   Include src/config.sh
 
   ROOT_DIR=$(dirname "$0")
   CONFIG_PATH="$ROOT_DIR/config/"
   APP_CONFIG_FILE="$CONFIG_PATH/mock.json"
-  CONFIGS_INI=("a")
+  CONFIGS_INI=()
 
   Mock APP_CONFIG_FILE
     echo "${APP_CONFIG_FILE}"
@@ -19,22 +20,20 @@ Describe 'Config'
     echo "${CONFIGS_INI[@]}"
   End
 
-
-  Mock utilly::prompt_input
-    echo "$@"
-  End
-
-
   Describe 'config::init'
     It 'should return 0'
-      When call config::init
+      When call config::init 0
+      The output should include 'finalizada com sucesso'
+    End
+
+    It 'version '
+      When call config::set 'version' "abc"
       The status should end with 0
     End
 
     It 'version '
-      version=$(get_version)
       When call config::get 'version'
-      The output should eq "$version"
+      The output should eq "abc"
     End
 
   End
@@ -54,8 +53,6 @@ Describe 'Config'
       When call config::get  'fruta'
       The output should eq 'morango'
     End
-
-
   End
 
   Describe 'change_var'

@@ -1,27 +1,62 @@
 #!/bin/bash
 
 Describe 'utilly'
+  Include src/print_color.sh
+  Include src/question.sh
   Include src/utilly.sh
 
-  Describe 'check_dependencies'
+  Describe 'check_essentials'
 
-    Mock essentials
-      essentials_mock=("git")
-      # shellcheck disable=SC1087
-      echo "${essentials_mock[@]}"
+    It 'check_essentials instaled'
+      Mock ESSENTIALS
+        essentials=("git")
+        echo "${essentials[@]}"
+      End
+      When call check_essentials 0
+      The status should end with 0
     End
 
-    It 'runs the check_dependencies not instaled'
-      # shellcheck disable=SC2154
-      When call check_dependencies "$essentials"
+    It 'runs the check_essentials instaled'
+      Mock ESSENTIALS
+        essentials+=("shellspec")
+        echo "${essentials[@]}"
+      End
+      Mock not_installed
+        echo "${#not_installed[@]}"
+      End
+
+      When call check_essentials 0
+      The status should end with 0
+    End
+
+    It 'check_essentials no instaled'
+      # shellcheck disable=SC2034
+      ESSENTIALS=("batata" "ddddddd" "gururu")
+      question() {
+        # shellcheck disable=SC2317
+        if true ; then
+          return 1
+        fi
+      }
+      When call check_essentials 0
+      The output should include "batata"
+      The output should include "ddddddd"
+      The output should include "gururu"
       The status should end with 1
     End
 
-    It 'runs the check_dependencies '
-      essentials+=("batata" "goiaba")
-      essentials2=$(join_by " " "${essentials[@]}")
-      When call check_dependencies "$essentials2"
-     The output should equal "batata goiaba"
+    It 'check_essentials no instaled and install'
+      Mock apt
+        echo 0;
+      End
+      # shellcheck disable=SC2034
+      ESSENTIALS=("batata")
+      question() {
+        return 0
+      }
+      When call check_essentials 0
+      The output should include "dependências instaladas com sucesso"
+      The status should end with 0
     End
 
   End
@@ -97,7 +132,6 @@ Describe 'utilly'
   End
 
 
-
   Describe 'file_exist'
     It 'file /batata/5/teste.txt not exist'
       When call file_exist "/batata/5/teste.txt"
@@ -163,6 +197,27 @@ Describe 'utilly'
     It 'apt_install simple'
       When call apt_install
       The output should equal 0
+    End
+  End
+
+
+# while selection_menu "${options[@]}" && read -rp "$prompt" -n 1 num && [[ "$num" ]]; do
+  Describe 'selection_menu'
+    It 'should options'
+      When call selection_menu '("name" "bird")'
+      The output should include 'Selecione as opções:'
+      The output should include 'name'
+      The output should include 'bird'
+      The status should end with 0
+    End
+  End
+
+  Describe 'utilly::err'
+    It 'should print error'
+      When call utilly::err 'error ao testar'
+      The output should include 'bird'
+      Dump stderr include 'error'
+      The status should end with 1
     End
   End
 

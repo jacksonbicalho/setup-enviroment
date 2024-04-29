@@ -29,11 +29,13 @@ function print_color() {
   COLOR="${2:-$COLOR_DEFAULT}"
   validate_print_color "$COLOR" || {
     echo -e "${COLOR} não é uma opção válida"
-    exit 1
+   return 1;
   }
 
   COLOR="$2"
   STARTCOLOR="\e[$COLOR"
   ENDCOLOR="\e[0m"
-  echo $(printf "$STARTCOLOR%b$ENDCOLOR" "$1")
+  res=$(printf "${STARTCOLOR}%b${ENDCOLOR}" "$1")
+  echo -e "$res"
+  return 0;
 }

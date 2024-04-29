@@ -3,18 +3,19 @@
 set -e
 
 function check_essentials() {
-  clear
+  local replace_line_sleep="${1:-5}"
+  # clear
   not_installed=()
   for dep in "${ESSENTIALS[@]}"; do
     text=$(print_color "Verificando instalação de $dep" "$COLOR_INFO")
-    utilly::replace_line "$text" 0.5
+    utilly::replace_line "$text" "$replace_line_sleep"
     if ! is_installed "$dep"; then
       not_installed+=("$dep")
     fi
   done
 
   if [[ "${#not_installed[@]}" -gt 0 ]]; then
-    clear
+    # clear
     print_color "Os seguintes pacotes devem ser instalados para prosseguirmos:" "$COLOR_WARNING"
     for install in "${not_installed[@]}"; do
       print_color "- $install" "$COLOR_DEFAULT"
@@ -26,7 +27,7 @@ function check_essentials() {
 
     apt_install "${not_installed[@]}"
     text=$(print_color "dependências instaladas com sucesso" "$COLOR_SUCCESS")
-    utilly::replace_line "$text"
+    utilly::replace_line "$text" "$replace_line_sleep"
   fi
 
   return 0
@@ -92,14 +93,6 @@ function apt_dist_upgrade() {
 function apt_install() {
   apt install --yes "${@}"
   return 0
-}
-
-function utilly::prompt_input() {
-  local text=$1
-  local var=$2
-  echo -e "$text $var"
-  read -r "${var?}"
-  echo "${var?}"
 }
 
 function utilly::replace_line() {
