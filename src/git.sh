@@ -3,10 +3,10 @@
 set -e
 
 function git::init() {
-
-  echo -e "Verificando instação do git."
+  utilly::replace_line "Verificando instação do git..." 5
   if ! git::is_instaled >/dev/null 2>&1; then
-    print_color "[!] git não está instalado" "$COLOR_WARNING"
+    text=$(print_color "[!] git não está instalado" "$COLOR_WARNING")
+    utilly::replace_line "$text" 5
     if question "Deseja instalar git?" y; then
       apt -y -qq install git -o Dpkg::Progress-Fancy="0" -o APT::Color="0" -o Dpkg::Use-Pty="0"
       if git::is_instaled; then
@@ -14,7 +14,8 @@ function git::init() {
       fi
     fi
   else
-    print_color "git está instalado." "$COLOR_SUCCESS"
+    text=$(print_color "git está instalado" "$COLOR_SUCCESS")
+    utilly::replace_line "$text" 5
   fi
 
   if question "Deseja verificar as configurações padrões?" y; then

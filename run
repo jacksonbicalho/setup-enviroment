@@ -4,7 +4,10 @@ set -e
 
 SRC_DIR=$(dirname "$0")
 SCRIPTPATH="${SRC_DIR}/src"
-SRC_RESOURCES="$(cd "${SCRIPTPATH}" >/dev/null 2>&1 || exit; pwd -P )"
+SRC_RESOURCES="$(
+  cd "${SCRIPTPATH}" >/dev/null 2>&1 || exit
+  pwd -P
+)"
 
 CONSTANTS="${SRC_RESOURCES}/constants"
 # shellcheck source=/dev/null
@@ -48,51 +51,40 @@ done
 shift $((OPTIND - 1))
 
 function main() {
-
-  # #########################################
-  # # Verica e/ou instala os pacotes essenciais para o funcionamento
-  echo -e "Verificando pacotes essenciais."
-  # shellcheck disable=SC2153
-  essentials=$(join_by " " "${ESSENTIALS[@]}")
-  not_installed=$(check_dependencies "$essentials")
-
-  if [[ -z $not_installed ]]; then
-    echo -en "os seguintes pacotes não estão instalados:\n"
-    # shellcheck disable=SC2068
-    for _not_installed in ${not_installed[@]};
-    do
-      echo -en "- $_not_installed\n"
-    done
-
-    if ! question "Para prosseguir precisamos instalar essas dependências, vamos continuar?" y ; then
-      exit 0
-    fi
-
-    apt_update
-    apt_upgrade
-    apt_dist_upgrade
-    # shellcheck disable=SC2068
-    apt_install ${not_installed[@]}
-    apt autoremove --yes
-  fi
-
-  echo -e "Os pacotes necessarios para começarmos estão instalados."
-  # figlet Seja bem vindo -w100
-
   if ! is_exist "${action}"; then
     help "A função ${action} não existe."
     exit
   fi
 
-
   # #########################################
   # # call function from -f
   if [ "$action" != "main" ]; then
     ${action}
+
+    return 0
   fi
 
-  config::init
-  git::init
+  action="check_essentials"
+  if ! ${action}; then
+    utilly::err "Erro ao executar $action"
+  fi
+
+  action="config::init"
+  if ! ${action}; then
+    utilly::err "Erro ao executar $action"
+  fi
+
+  clear
+  action="figlet Seja bem vindo -w100"
+  if ! ${action}; then
+    utilly::err "Erro ao executar $action"
+  fi
+
+  action="git::init"
+  if ! ${action}; then
+    utilly::err "Erro ao executar $action"
+  fi
+
   # ssh_keygen
   # github_send_ssh_key
 

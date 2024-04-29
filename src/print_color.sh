@@ -25,7 +25,7 @@ EOF
 }
 
 
-print_color() {
+function print_color() {
   COLOR="${2:-$COLOR_DEFAULT}"
   validate_print_color "$COLOR" || {
     echo -e "${COLOR} não é uma opção válida"

@@ -12,7 +12,7 @@ readonly GIT_HUB_NEW_TOKEN_URL="https://github.com/settings/tokens/new?descripti
 
 readonly ALGORITHMS=("dsa" "ecdsa" "ecdsa-sk" "ed25519" "ed25519-sk" "rsa" "cancelar")
 readonly SLEEP=0.5
-CONFIGS_INI=("full_name" "email")
+readonly CONFIGS_INI=("full_name" "email")
 
 export ESSENTIALS GIT_HUB_NEW_TOKEN_URL APP_CONFIG_FILE LOG_PATH
 export ALGORITHMS SLEEP CONFIGS_INI
