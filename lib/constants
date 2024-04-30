@@ -5,7 +5,7 @@ set -e
 ROOT_DIR="$(cd "$(dirname "$0")/../" >/dev/null 2>&1 || exit ;  pwd -P)"
 readonly CONFIG_PATH="$HOME/.config/setup-enviroment"
 readonly APP_CONFIG_FILE="${CONFIG_PATH}/app.conf"
-readonly LOG_PATH="${CONFIG_PATH}/log"
+readonly LOG_PATH="${CONFIG_PATH}/logs"
 ESSENTIALS=("jq" "ca-certificates" "gnupg" "curl" "openssh-client")
 ESSENTIALS+=("build-essential" "libgtk-3-dev" "intltool" "libgtk2.0-dev")
 readonly ESSENTIALS+=("libglib2.0-dev" "libeditorconfig-dev" "figlet")
