@@ -17,9 +17,7 @@ jobs:
 
     - name: Create dir
       run: |
-        mkdir -p /app/logs
-      run: |
-        mkdir -p /app/coverage
+        mkdir -p /app/logs && mkdir -p /app/coverage
 
     - name: Run tests
       run: docker-compose run shellspec --kcov
