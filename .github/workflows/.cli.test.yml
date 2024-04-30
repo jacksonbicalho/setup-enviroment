@@ -9,6 +9,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Create dir
+        run: |
+          mkdir -p /app/logs
+          mkdir -p /app/coverage
+
+    steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
@@ -16,4 +22,4 @@ jobs:
       run: docker-compose build
 
     - name: Run tests
-      run: docker-compose run shellspec
+      run: docker-compose run shellspec --kcov
