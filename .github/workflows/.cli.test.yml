@@ -12,6 +12,7 @@ jobs:
       - name: Create dir
         run: |
           mkdir -p /app/logs
+        run: |
           mkdir -p /app/coverage
 
     steps:
