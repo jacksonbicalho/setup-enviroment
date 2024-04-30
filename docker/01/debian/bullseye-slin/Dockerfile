@@ -37,8 +37,8 @@ RUN git config --global init.defaultBranch master && \
 
 COPY ./docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 
-RUN mkdir -p /app/coverage && \
-  mkdir -p /app/logs
+RUN mkdir -p coverage && \
+  mkdir -p logs
 
 
 RUN useradd \
