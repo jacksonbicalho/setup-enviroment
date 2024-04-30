@@ -94,7 +94,6 @@ write_file() {
 }
 
 function get_version() {
-  ROOT_DIR=$(dirname "$0")
   VERSION_FILE="${ROOT_DIR}/version"
   if ! file_exist "${VERSION_FILE}"; then
     touch "${VERSION_FILE}"

@@ -3,13 +3,11 @@
 set -e
 
 SRC_DIR=$(dirname "$0")
-SCRIPTPATH="${SRC_DIR}/../src"
+SCRIPTPATH="${SRC_DIR}/../lib"
 SRC_RESOURCES="$(
   cd "${SCRIPTPATH}" >/dev/null 2>&1 || exit
   pwd -P
 )"
-
-echo -e "$SRC_RESOURCES"
 
 CONSTANTS="${SRC_RESOURCES}/constants"
 # shellcheck source=/dev/null

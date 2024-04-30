@@ -1,7 +1,7 @@
 #!/bin/bash
 
 Describe 'constants'
-    Include src/constants
+    Include lib/constants
     func() {
         # shellcheck disable=SC2034
         constant=$1

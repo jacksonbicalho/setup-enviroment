@@ -1,7 +1,7 @@
 services:
   app:
-    container_name: jacksonbicalho-shellspec-kcov-app
-    image: jacksonbicalho/setup-enviroment:ubuntu.0.0
+    container_name: jacksonbicalho-shellspec-kcov-app-bullseye-slin
+    image: jacksonbicalho/setup-enviroment:bullseye-slin.0.0
     tty: true
     volumes:
       - .:/app
@@ -10,9 +10,9 @@ services:
       dockerfile: ./Dockerfile
       target: app
 
-  tests:
-    container_name: jacksonbicalho-shellspec-kcov-tests
-    image: jacksonbicalho/shellspec-kcov:ubuntu.0.0
+  shellspec:
+    container_name: jacksonbicalho-shellspec-kcov-bullseye-slin
+    image: jacksonbicalho/shellspec-kcov:bullseye-slin.0.0
     # env_file:
     #   - .env
     tty: true
@@ -21,5 +21,5 @@ services:
     build:
       context: ./docker/01/debian/bullseye-slin
       dockerfile: ./Dockerfile
-      target: tests
+      target: shellspec
 

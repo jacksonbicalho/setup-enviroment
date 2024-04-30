@@ -1,9 +1,13 @@
-#!/bin/bash
+#shellcheck shell=sh
 
 Describe 'utilly'
-  Include src/print_color.sh
-  Include src/question.sh
-  Include src/utilly.sh
+  Include lib/print_color.sh
+  Include lib/question.sh
+  Include lib/utilly.sh
+
+  Mock config::get
+    echo "$@"
+  End
 
   Describe 'check_essentials'
 
@@ -209,6 +213,19 @@ Describe 'utilly'
       The output should include 'name'
       The output should include 'bird'
       The status should end with 0
+    End
+  End
+
+
+  LOG_PATH="./log"
+  Describe 'utilly::err'
+    setup() { rm -rf "$LOG_PATH"; }
+    Before 'setup'
+    After 'setup'
+    It 'should return date and eerror'
+      When call utilly::err 'goiaba'
+      text=$(cat "$LOG_PATH/error.log")
+      The output should include "$text"
     End
   End
 

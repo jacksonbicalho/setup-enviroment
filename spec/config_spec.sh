@@ -1,15 +1,13 @@
-#!/bin/bash
+#shellcheck shell=sh
 
 Describe 'Config'
+  Include lib/print_color.sh
+  Include lib/utilly.sh
+  Include lib/config.sh
 
-  Include src/print_color.sh
-  Include src/utilly.sh
-  Include src/config.sh
-
-  ROOT_DIR=$(dirname "$0")
+  ROOT_DIR="/tmp"
   CONFIG_PATH="$ROOT_DIR/config/"
   APP_CONFIG_FILE="$CONFIG_PATH/mock.json"
-  CONFIGS_INI=()
 
   Mock APP_CONFIG_FILE
     echo "${APP_CONFIG_FILE}"
@@ -17,6 +15,7 @@ Describe 'Config'
 
 
   Mock CONFIGS_INI
+    # shellcheck disable=SC3054
     echo "${CONFIGS_INI[@]}"
   End
 

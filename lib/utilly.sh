@@ -113,5 +113,13 @@ function selection_menu() {
 }
 
 function utilly::err() {
-  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2
+  local file_error_log="error.log"
+  if ! is_dir "$LOG_PATH"; then
+    mkdir -p "$LOG_PATH"
+  fi
+  if ! file_exist "$LOG_PATH/$file_error_log"; then
+    touch "$LOG_PATH/$file_error_log"
+  fi
+  now=$(date_now)
+  echo "[$now]:" "${@}" 2>&1 | tee "$LOG_PATH/$file_error_log"
 }

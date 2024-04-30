@@ -35,7 +35,7 @@ RUN git config --global init.defaultBranch master && \
         make  && \
         make install
 
-COPY ./scripts/docker-tests-entrypoint /usr/local/bin/
+COPY ./docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 
 RUN useradd \
   --shell /usr/bin/zsh \

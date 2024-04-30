@@ -6,7 +6,7 @@ RUN apt update && \
 WORKDIR /app
 
 
-FROM app as tests
+FROM app as shellspec
 RUN apt update && \
   apt dist-upgrade --yes && \
   apt install --yes \

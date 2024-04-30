@@ -1,7 +1,7 @@
 #!/bin/bash
 
 Describe 'print_color'
-  Include src/print_color.sh
+  Include lib/print_color.sh
 
     Describe 'colors valids'
       Parameters

@@ -2,6 +2,7 @@
 
 set -e
 
+ROOT_DIR="$(cd "$(dirname "$0")/../" >/dev/null 2>&1 || exit ;  pwd -P)"
 readonly CONFIG_PATH="$HOME/.config/setup-enviroment"
 readonly APP_CONFIG_FILE="${CONFIG_PATH}/app.conf"
 readonly LOG_PATH="${CONFIG_PATH}/log"
@@ -13,6 +14,7 @@ readonly GIT_HUB_NEW_TOKEN_URL="https://github.com/settings/tokens/new?descripti
 readonly ALGORITHMS=("dsa" "ecdsa" "ecdsa-sk" "ed25519" "ed25519-sk" "rsa" "cancelar")
 readonly SLEEP=0.5
 readonly CONFIGS_INI=("full_name" "email")
+readonly ROOT_DIR
 
-export ESSENTIALS GIT_HUB_NEW_TOKEN_URL APP_CONFIG_FILE LOG_PATH
-export ALGORITHMS SLEEP CONFIGS_INI
+export ROOT_DIR ESSENTIALS GIT_HUB_NEW_TOKEN_URL APP_CONFIG_FILE LOG_PATH
+export ALGORITHMS SLEEP CONFIGS_INI CONFIG_PATH
