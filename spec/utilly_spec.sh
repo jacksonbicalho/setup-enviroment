@@ -35,6 +35,7 @@ Describe 'utilly'
 
     It 'check_essentials no instaled'
       # shellcheck disable=SC2034
+      # shellcheck disable=SC3030
       ESSENTIALS=("batata" "ddddddd" "gururu")
       question() {
         # shellcheck disable=SC2317
