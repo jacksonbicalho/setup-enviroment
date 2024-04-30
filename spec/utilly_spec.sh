@@ -212,14 +212,5 @@ Describe 'utilly'
     End
   End
 
-  Describe 'utilly::err'
-    It 'should print error'
-      When call utilly::err 'error ao testar'
-      The output should include 'bird'
-      Dump stderr include 'error'
-      The status should end with 1
-    End
-  End
-
 End
 

@@ -49,7 +49,7 @@ function git::init() {
       read -r config
       git config --global "${selected}" "${config}"
       if git::check_config "${selected}"; then
-        set_config "git.$selected" "${config}"
+        config::set "git.$selected" "${config}"
         echo -e "${selected} configurado: ${config}\n"
         unset config
       fi

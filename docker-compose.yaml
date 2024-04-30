@@ -1,25 +1,25 @@
 services:
   app:
     container_name: jacksonbicalho-shellspec-kcov-app
-    image: jacksonbicalho/setup-enviroment:debian-bookworm0.0.0
+    image: jacksonbicalho/setup-enviroment:ubuntu.0.0
     tty: true
     volumes:
       - .:/app
     build:
-      context: ./
+      context: ./docker/01/debian/bullseye-slin
       dockerfile: ./Dockerfile
       target: app
 
   tests:
     container_name: jacksonbicalho-shellspec-kcov-tests
-    image: jacksonbicalho/shellspec-kcov:debian-bookworm0.0.0
+    image: jacksonbicalho/shellspec-kcov:ubuntu.0.0
     # env_file:
     #   - .env
     tty: true
     volumes:
       - .:/app
     build:
-      context: ./
+      context: ./docker/01/debian/bullseye-slin
       dockerfile: ./Dockerfile
       target: tests
 

@@ -6,6 +6,7 @@ change_var
 check_essentials
 config::get
 config::init
+config::prompt_input
 config::set
 date_now
 file_exist
@@ -29,7 +30,6 @@ selection_menu
 set_credentials
 ssh_keygen
 utilly::err
-utilly::prompt_input
 utilly::replace_line
 validate_print_color
 validate_question

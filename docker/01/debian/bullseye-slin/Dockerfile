@@ -1,4 +1,4 @@
-FROM debian:bookworm as app
+FROM debian:bullseye-slim as app
 LABEL package=bicalho
 RUN apt update && \
     apt dist-upgrade --yes
@@ -35,7 +35,7 @@ RUN git config --global init.defaultBranch master && \
         make  && \
         make install
 
-COPY ./scripts/docker-tests-entrypoint /usr/local/bin/
+COPY ./docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 
 RUN useradd \
   --shell /usr/bin/zsh \
@@ -44,4 +44,4 @@ RUN useradd \
 
 USER test
 
-ENTRYPOINT ["docker-tests-entrypoint"]
+ENTRYPOINT ["docker-entrypoint"]
