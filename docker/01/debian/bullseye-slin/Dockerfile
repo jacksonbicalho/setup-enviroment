@@ -37,6 +37,10 @@ RUN git config --global init.defaultBranch master && \
 
 COPY ./docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 
+RUN mkdir -p /app/coverage && \
+  mkdir -p /app/logs
+
+
 RUN useradd \
   --shell /usr/bin/zsh \
   --uid 1000 \

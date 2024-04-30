@@ -15,14 +15,5 @@ jobs:
     - name: Build docker images
       run: docker-compose build shellspec
 
-    - name: Create dir
-      run: |
-        mkdir -p ./logs && mkdir -p ./coverage
-
     - name: Run tests
-      run: docker-compose run --rm \
-        shellspec  --kcov \
-        --format d \
-        --kcov \
-        --reportdir report \
-        --output documentation
+      run: docker-compose run --rm shellspec  --kcov

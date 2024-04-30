@@ -1,7 +1,7 @@
 services:
   app:
     container_name: jacksonbicalho-shellspec-kcov-app-bullseye-slin
-    image: jacksonbicalho/setup-enviroment:bullseye-slin.0.0
+    image: jacksonbicalho/setup-enviroment:bullseye-app-slin.0.0
     tty: true
     volumes:
       - .:/app
