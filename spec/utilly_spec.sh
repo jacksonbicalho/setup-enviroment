@@ -217,7 +217,7 @@ Describe 'utilly'
   End
 
 
-  LOG_PATH="./logs"
+  LOG_PATH="logs"
   Describe 'utilly::err'
     setup() { rm -rf "$LOG_PATH"; }
     Before 'setup'
