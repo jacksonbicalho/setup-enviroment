@@ -1,4 +1,4 @@
-# shellcheck shell=sh
+#shellcheck shell=ksh
 
 # Defining variables and functions here will affect all specfiles.
 # Change shell options inside a function may cause different behavior,

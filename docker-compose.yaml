@@ -13,8 +13,6 @@ services:
   shellspec:
     container_name: jacksonbicalho-shellspec-kcov-bullseye-slin
     image: jacksonbicalho/shellspec-kcov:bullseye-slin.0.0
-    # env_file:
-    #   - .env
     tty: true
     volumes:
       - .:/app
