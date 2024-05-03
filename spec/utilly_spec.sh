@@ -1,4 +1,4 @@
-#shellcheck shell=sh
+#shellcheck shell=ksh
 
 Describe 'utilly'
   Include lib/print_color.sh
@@ -218,7 +218,7 @@ Describe 'utilly'
   End
 
 
-  LOG_PATH="logs"
+  LOG_PATH="./spec/mocks/logs"
   Describe 'utilly::err'
     setup() { rm -rf "$LOG_PATH"; }
     Before 'setup'
