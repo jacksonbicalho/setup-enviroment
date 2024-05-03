@@ -16,4 +16,4 @@ jobs:
       run: docker-compose build shellspec
 
     - name: Run tests
-      run: docker-compose run --rm shellspec --kcov --format d --reportdir report --output documentation
+      run: docker-compose run --rm -u root shellspec --kcov --format d --reportdir report --output documentation

@@ -42,6 +42,7 @@ RUN useradd \
   --uid 1000 \
   test
 
+WORKDIR /app
 
 RUN mkdir -p /app/coverage && chown test -R /app/coverage
 RUN mkdir -p /app/report && chown test -R /app/report
