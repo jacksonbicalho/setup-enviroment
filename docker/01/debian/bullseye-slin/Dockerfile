@@ -43,8 +43,8 @@ RUN useradd \
   test
 
 
-RUN mkdir -p coverage && chown test -R coverage
-RUN mkdir -p report && chown test -R report
+RUN mkdir -p /app/coverage && chown test -R /app/coverage
+RUN mkdir -p /app/report && chown test -R /app/report
 
 
 USER test
