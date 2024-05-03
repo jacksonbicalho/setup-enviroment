@@ -42,6 +42,11 @@ RUN useradd \
   --uid 1000 \
   test
 
+
+RUN mkdir -p coverage && chown test -R coverage
+RUN mkdir -p report && chown test -R report
+
+
 USER test
 
 ENTRYPOINT ["docker-entrypoint"]

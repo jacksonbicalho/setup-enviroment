@@ -3,11 +3,6 @@ on:
   pull_request:
   push: { branches: master }
 
-
-defaults:
- run:
-  working-directory: ./app
-
 jobs:
   test:
     name: Run test suite
