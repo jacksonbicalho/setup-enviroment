@@ -1,4 +1,4 @@
-#shellcheck shell=bash
+#shellcheck shell=ksh
 
 Describe 'Config'
   Include lib/print_color.sh
@@ -17,21 +17,20 @@ Describe 'Config'
     echo 0
   End
 
-  setup() { rm -rf "$CONFIG_PATH"; }
+  setup() { mkdir -p "$CONFIG_PATH"; }
+  end() { rm -rf "$CONFIG_PATH"; }
   BeforeAll 'setup'
-  AfterAll 'setup'
+  AfterAll 'end'
 
 
   Describe 'config::init'
-
+    Data "config_read"
     It 'should return 0 with success'
-      Data "config_read"
       When call config::init 0
       The output should include 'finalizada com sucesso'
     End
 
     It 'should create diretory config'
-      Data "config_read"
       When call config::init 0
       The output should include 'finalizada com sucesso'
     End
