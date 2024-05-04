@@ -1,4 +1,4 @@
-#shellcheck shell=sh
+#!/bin/bash
 
 Describe 'constants'
     Include lib/constants
