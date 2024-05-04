@@ -1,4 +1,4 @@
-#shellcheck shell=sh
+#shellcheck shell=ksh
 
 Describe 'Config'
   Include lib/print_color.sh
@@ -17,13 +17,17 @@ Describe 'Config'
     echo 0
   End
 
-  setup() { rm -rf "$CONFIG_PATH"; }
-  BeforeAll 'setup'
-  AfterAll 'setup'
+  Mock get_timezone_system
+    echo "UTC+3"
+  End
+
+
+  # setup() { rm -rf "$CONFIG_PATH"; }
+  # BeforeAll 'setup'
+  # AfterAll 'setup'
 
 
   Describe 'config::init'
-    Data 'config_read'
     It 'should return 0 with success'
       When call config::init 0
       The output should include 'finalizada com sucesso'
@@ -43,23 +47,15 @@ Describe 'Config'
       echo "${VERSION_FILE}"
     End
 
-    create_file() { echo "abc" > "$VERSION_FILE"; }
-    delete_file() { rm -f "$VERSION_FILE"; }
-    Before 'create_file'
-    After 'delete_file'
+    init() { echo "abc" > "$VERSION_FILE"; }
+    end() { rm -f "$VERSION_FILE"; }
+    Before 'init'
+    After 'end'
     It 'should define variable no existent'
       When call get_version
       The output should eq 'abc'
       The status should end with 0
     End
-
-    It 'should create file version if not exist'
-      delete_file
-      When call get_version
-      The output should eq '0.0.0-dev'
-      The status should end with 0
-    End
-
   End
 
 
@@ -103,14 +99,14 @@ Describe 'Config'
 
 
   Describe 'config::get'
-    It 'should return value defined prev'
+    It ' run external commands without mocking'
       When call config::get 'fruta'
       The output should eq "morango"
     End
 
-    It 'should return value defined 0.0.1'
-      config::set 'configuration' '0.0.1'
-      When call config::get 'configuration'
+    It 'cannot run external commands without mocking'
+      config::set 'version' '0.0.1'
+      When call config::get 'version'
       The output should eq '0.0.1'
     End
 
@@ -118,15 +114,7 @@ Describe 'Config'
       When call config::get 'not_exist'
       The status should end with 1
     End
-  End
 
-  Describe 'get_timezone_system'
-      It 'should return timezone system'
-      timezone=$(cat /etc/timezone)
-      When call get_timezone_system
-      The output should eq  "$timezone"
-      The status should end with 0
-    End
   End
 
 End

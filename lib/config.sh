@@ -97,7 +97,7 @@ function get_version() {
   VERSION_FILE="${ROOT_DIR}/version"
   if ! file_exist "${VERSION_FILE}"; then
     touch "${VERSION_FILE}"
-    echo "0.0.0-dev" >"${VERSION_FILE}"
+    echo "$VERSIOM_INITIAL" >"${VERSION_FILE}"
   fi
   version=$(head -n 1 "$VERSION_FILE")
   echo "$version"

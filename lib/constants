@@ -11,10 +11,10 @@ ESSENTIALS=("jq" "ca-certificates" "gnupg" "curl" "openssh-client")
 ESSENTIALS+=("build-essential" "libgtk-3-dev" "intltool" "libgtk2.0-dev")
 readonly ESSENTIALS+=("libglib2.0-dev" "libeditorconfig-dev" "figlet")
 readonly GIT_HUB_NEW_TOKEN_URL="https://github.com/settings/tokens/new?description=Setup+enviroment&&scopes=admin:public_key"
-
+readonly VERSIOM_INITIAL=0.0.0-DEV
 readonly ALGORITHMS=("dsa" "ecdsa" "ecdsa-sk" "ed25519" "ed25519-sk" "rsa" "cancelar")
 readonly SLEEP=0.5
 readonly ROOT_DIR
 
 export ROOT_DIR ESSENTIALS GIT_HUB_NEW_TOKEN_URL APP_CONFIG_FILE LOG_PATH
-export ALGORITHMS SLEEP CONFIG_PATH
+export ALGORITHMS SLEEP CONFIG_PATH VERSIOM_INITIAL
