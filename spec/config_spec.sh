@@ -23,7 +23,9 @@ Describe 'Config'
 
 
   Describe 'config::init'
+
     Data "config_read"
+
     It 'should return 0 with success'
       When call config::init 0
       The output should include 'finalizada com sucesso'
