@@ -1,4 +1,4 @@
-#shellcheck shell=ksh
+#shellcheck shell=bash
 
 Describe 'constants'
     Include lib/constants

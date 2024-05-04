@@ -1,4 +1,4 @@
-#shellcheck shell=ksh
+#shellcheck shell=bash
 
 Describe 'print_color'
   Include lib/print_color.sh
