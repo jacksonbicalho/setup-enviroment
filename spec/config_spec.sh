@@ -13,8 +13,9 @@ Describe 'Config'
     echo "${APP_CONFIG_FILE}"
   End
 
+  SLEEP=0
   Mock SLEEP
-    echo 0
+    echo $SLEEP
   End
 
   Mock get_timezone_system
@@ -22,12 +23,13 @@ Describe 'Config'
   End
 
 
-  # setup() { rm -rf "$CONFIG_PATH"; }
-  # BeforeAll 'setup'
-  # AfterAll 'setup'
+  setup() { rm -rf "$CONFIG_PATH"; }
+  BeforeAll 'setup'
+  AfterAll 'setup'
 
 
   Describe 'config::init'
+    Data 'read_config'
     It 'should return 0 with success'
       When call config::init 0
       The output should include 'finalizada com sucesso'
