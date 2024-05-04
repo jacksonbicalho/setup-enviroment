@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+
+set -e
+
+SRC_DIR=$(dirname "$0")
+SCRIPTPATH="${SRC_DIR}/../lib"
+SRC_RESOURCES="$(
+  cd "${SCRIPTPATH}" >/dev/null 2>&1 || exit
+  pwd -P
+)"
+
+CONSTANTS="${SRC_RESOURCES}/constants"
+# shellcheck source=/dev/null
+. "${CONSTANTS}"
+
+if [ -d "$SRC_RESOURCES" ]; then
+  extensions="*.sh"
+  for file_name in ${SRC_RESOURCES}/${extensions}; do
+    if [ -r "$file_name" ]; then
+      # shellcheck source=/dev/null
+      . "${file_name}"
+    fi
+  done
+  unset file_name
+fi
+
+action="main"
+
+while getopts ':hf:' option; do
+  case "$option" in
+  h)
+    help
+    exit
+    ;;
+  f)
+    action=$OPTARG
+    ;;
+  :)
+    printf "missing argument for -%s\n" "$OPTARG" >&2
+    help >&2
+    exit 1
+    ;;
+  \?)
+    printf "illegal option: -%s\n" "$OPTARG" >&2
+    echo help >&2
+    exit 1
+    ;;
+  esac
+done
+
+shift $((OPTIND - 1))
+
+function main() {
+  if ! is_exist "${action}"; then
+    help "A função ${action} não existe."
+    exit
+  fi
+
+  # #########################################
+  # # call function from -f
+  if [ "$action" != "main" ]; then
+    ${action}
+
+    return 0
+  fi
+
+  action="utilly::check_essentials"
+  if ! ${action}; then
+    utilly::err "Erro ao executar $action"
+  fi
+
+  action="config::init"
+  if ! ${action}; then
+    utilly::err "Erro ao executar $action"
+  fi
+
+  clear
+  action="figlet Seja bem vindo -w100"
+  if ! ${action}; then
+    utilly::err "Erro ao executar $action"
+  fi
+  echo -e "--------------------------------------------------------------------"
+
+  action="git::init"
+  if ! ${action}; then
+    utilly::err "Erro ao executar $action"
+  fi
+
+  # ssh_keygen
+  # github_send_ssh_key
+
+}
+
+main "$@"

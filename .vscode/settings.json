@@ -1,0 +1,8 @@
+{
+    "[shellscript]": {
+        "breadcrumbs.showArrays": true,
+        "files.eol": "\n",
+        "breadcrumbs.showFunctions": true,
+        "breadcrumbs.showVariables": true,
+    }
+}
