@@ -12,5 +12,8 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Build docker images
+      run: docker-compose build shellspec --no-cache
+
     - name: Run tests
       run: docker-compose run --rm -u root shellspec --kcov --format d --reportdir report --output documentation

@@ -17,14 +17,13 @@ Describe 'Config'
     echo 0
   End
 
-  setup() { mkdir -p "$CONFIG_PATH"; }
-  end() { rm -rf "$CONFIG_PATH"; }
+  setup() { rm -rf "$CONFIG_PATH"; }
   BeforeAll 'setup'
-  AfterAll 'end'
+  AfterAll 'setup'
 
 
   Describe 'config::init'
-    Data "config_read"
+    Data 'config_read'
     It 'should return 0 with success'
       When call config::init 0
       The output should include 'finalizada com sucesso'
