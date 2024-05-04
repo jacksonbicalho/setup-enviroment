@@ -3,16 +3,7 @@
 set -e
 
 function help() {
-  FIRST_MESSAGE="${1:f}"
-  funcs=$(compgen -A function | grep -v '^_')
-  echo "${funcs}" | cat >functions
-  INFILE=functions
-  funcs_list=" "
-
-  # Read the input file line by line
-  while read -r LINE; do
-    funcs_list+=$(echo -e "\n\t${LINE} |")
-  done <"$INFILE"
+  FIRST_MESSAGE="${1:h}"
 
   if [[ "$FIRST_MESSAGE" != "f" ]]; then
     echo -e "=================================================================="
@@ -24,10 +15,7 @@ function help() {
 
 where:
   -h  show this help text
-  -f  Informe a função a ser executada
-
-    FUNCTIONS:
-  $funcs_list
+  -v  display current version
 "
 
   echo "$usage"

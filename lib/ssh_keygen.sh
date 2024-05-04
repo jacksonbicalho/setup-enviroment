@@ -4,7 +4,7 @@ set -e
 
 function ssh_keygen() {
 
-  if ! __is_dir "$HOME/.ssh"; then
+  if ! is_dir "$HOME/.ssh"; then
     return 1
   fi
 
@@ -29,10 +29,15 @@ function ssh_keygen() {
 
   echo -e "Digite um email válido:"
   read email
-  if ! _is_email_valid "${email}"; then
+  if ! is_email_valid "${email}"; then
     print_color "Email $email é inválido.\n" $COLOR_DANGER
     return 0
   fi
+
+  set_config "config[].email" "\"${email}\""
+
+  git config --global "user.email" "${email}"
+
 
   PS3="Selecione um algorítmo de sua preferência: "
   select algorithm in "${ALGORITHMS[@]}"; do
@@ -56,5 +61,6 @@ function ssh_keygen() {
   ssh-keygen -t ${selected} -q -f "$HOME/.ssh/id_${selected}" -N "" -C "$email"
   eval "$(ssh-agent -s)"
   ssh-add "$HOME/.ssh/id_${selected}"
+  export KEY_PUB=id_${selected}.pub
   cat "$HOME/.ssh/id_${selected}.pub"
 }

@@ -1,15 +1,23 @@
-version: '3'
-
 services:
   app:
-    container_name: debian-bookworm
-    image: bookworm  
-    privileged: true
+    container_name: jacksonbicalho-shellspec-kcov-app-bullseye-slin
+    image: jacksonbicalho/setup-enviroment:bullseye-app-slin.0.0
     tty: true
     volumes:
       - .:/app
     build:
-      context: ./
+      context: ./docker/01/debian/bullseye-slin
       dockerfile: ./Dockerfile
+      target: app
 
+  shellspec:
+    container_name: jacksonbicalho-shellspec-kcov-bullseye-slin
+    image: jacksonbicalho/shellspec-kcov:bullseye-slin.0.0
+    tty: true
+    volumes:
+      - .:/app
+    build:
+      context: ./docker/01/debian/bullseye-slin
+      dockerfile: ./Dockerfile
+      target: shellspec
 
