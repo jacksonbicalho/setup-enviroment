@@ -1,0 +1,7 @@
+installed_packages.txt
+coverage
+report
+.env
+config/*
+!empty
+

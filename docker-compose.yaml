@@ -1,0 +1,13 @@
+services:
+  app:
+    image: jacksonbicalho/setup-enviroment:01-bullseye-slin
+    tty: true
+    volumes:
+      - .:/app
+
+  shellspec:
+    image: jacksonbicalho/setup-enviroment:01-shellspec-kcov-bullseye-slin
+    tty: true
+    volumes:
+      - .:/app
+
