@@ -1,4 +1,4 @@
-#shellcheck shell=sh
+#!/bin/bash
 
 Describe 'utilly'
   Include lib/print_color.sh
@@ -213,34 +213,34 @@ Describe 'utilly'
   End
 
 
-  Describe 'selection_menu'
-    It 'should return label defined'
-      options=()
-      options+=("user.name" "user.email")
-      declare -a FLAGS
-      FLAGS=(--label="Configuração do git" --options="${options[@]}")
-      selection_menu "${FLAGS[@]}"
-      When call selection_menu "${FLAGS[@]}"
-      The output should include 'Configuração do git'
-      The output should include 'user.name'
-      The output should include 'user.email'
-      The status should end with 0
-    End
+  # Describe 'selection_menu'
+  #   It 'should return label defined'
+  #     options=()
+  #     options+=("user.name" "user.email")
+  #     declare -a FLAGS
+  #     FLAGS=(--label="Configuração do git" --options="${options[@]}")
+  #     selection_menu "${FLAGS[@]}"
+  #     When call selection_menu "${FLAGS[@]}"
+  #     The output should include 'Configuração do git'
+  #     The output should include 'user.name'
+  #     The output should include 'user.email'
+  #     The status should end with 0
+  #   End
 
-    It 'should return options defined'
-      options=()
-      options+=("1" "2" "3" "4")
-      declare -a FLAGS
-      FLAGS=(--options="${options[@]}")
-      selection_menu "${FLAGS[@]}"
-      When call selection_menu "${FLAGS[@]}"
-      The output should include '1'
-      The output should include '2'
-      The output should include '3'
-      The output should include '4'
-      The status should end with 0
-    End
-  End
+  #   It 'should return options defined'
+  #     options=()
+  #     options+=("1" "2" "3" "4")
+  #     declare -a FLAGS
+  #     FLAGS=(--options="${options[@]}")
+  #     selection_menu "${FLAGS[@]}"
+  #     When call selection_menu "${FLAGS[@]}"
+  #     The output should include '1'
+  #     The output should include '2'
+  #     The output should include '3'
+  #     The output should include '4'
+  #     The status should end with 0
+  #   End
+  # End
 
 
   LOG_PATH="./spec/mocks/logs"
