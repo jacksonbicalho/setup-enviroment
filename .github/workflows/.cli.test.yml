@@ -16,4 +16,4 @@ jobs:
       run: docker-compose -f docker-compose.test.yaml build
 
     - name: Run tests
-      run: ./debian_tests.sh
+      run: sudo ./debian_tests.sh
