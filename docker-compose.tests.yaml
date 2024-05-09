@@ -1,0 +1,8 @@
+services:
+  shellspec:
+    environment:
+      - IMAGE=${IMAGE}
+    image: "${IMAGE}"
+    volumes:
+      - .:/app
+

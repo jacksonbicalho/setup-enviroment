@@ -1,0 +1,15 @@
+services:
+  app:
+    image: jacksonbicalho/setup-enviroment:01-bullseye-slin
+    tty: true
+    volumes:
+      - .:/app
+
+  shellspec:
+    environment:
+      - IMAGE=${IMAGE}
+    image: "${IMAGE}"
+    tty: true
+    volumes:
+      - .:/app
+

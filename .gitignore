@@ -1,0 +1,9 @@
+installed_packages.txt
+coverage
+report
+.env
+config/*
+*.log
+01-shellspec-kcov-*
+!empty
+
