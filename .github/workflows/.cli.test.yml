@@ -12,8 +12,5 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Build docker images
-      run: docker-compose -f docker-compose.test.yaml build
-
     - name: Run tests
-      run: ./debian_tests.sh
+      run: ./tests.sh
