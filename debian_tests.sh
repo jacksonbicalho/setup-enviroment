@@ -18,7 +18,7 @@ docker_images=(
 
 function main() {
   for docker_image in "${@}"; do
-    IMAGE=jacksonbicalho/setup-enviroment:"$docker_image" docker compose \
+    IMAGE=jacksonbicalho/setup-enviroment:"$docker_image" docker-compose \
       -f docker-compose.test.yaml \
       run \
       -u root \
