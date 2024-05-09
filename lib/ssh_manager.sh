@@ -2,7 +2,7 @@
 
 set -e
 
-function ssh_keygen() {
+function ssh_manager::keygen() {
 
   if ! utilly::is_dir "$HOME/.ssh"; then
     return 1
@@ -11,7 +11,7 @@ function ssh_keygen() {
   ssh_keys=( $( ls "$HOME/.ssh" ) )
   if [[ ! "${#ssh_keys[@]}" == 0 ]]; then
     echo -en "Você possue as seguintes chaves já instaladas em seu sistema:\n"
-    for ssh_key in ${ssh_keys[@]};
+    for ssh_key in "${ssh_keys[@]}";
     do
       echo -en "=>> $ssh_key\n"
     done

@@ -1,7 +1,10 @@
 installed_packages.txt
 coverage
 report
+*-coverage
+*-report
 .env
 config/*
+logs
 !empty
 

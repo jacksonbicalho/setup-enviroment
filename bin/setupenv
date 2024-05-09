@@ -64,12 +64,12 @@ function main() {
     return 0
   fi
 
-  action="utilly::check_essentials"
+  action="config::init"
   if ! ${action}; then
     utilly::err "Erro ao executar $action"
   fi
 
-  action="config::init"
+  action="utilly::check_essentials"
   if ! ${action}; then
     utilly::err "Erro ao executar $action"
   fi
